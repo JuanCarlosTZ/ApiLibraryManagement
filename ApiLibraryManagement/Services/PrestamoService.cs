@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 public class PrestamoService : IPrestamoService
 {
-    private readonly PrestamoRepository _prestamoRepo;
-    private readonly LibroRepository _libroRepo;
-    private readonly AutorRepository _autorRepo;
+    private readonly IPrestamoRepository _prestamoRepo;
+    private readonly ILibroRepository _libroRepo;
+    private readonly IAutorRepository _autorRepo;
 
     private readonly PrestamoMapper _prestamoMapper;
 
     public PrestamoService(
-        PrestamoRepository prestamoRepo,
-        LibroRepository libroRepo,
-        AutorRepository autorRepo,
+        IPrestamoRepository prestamoRepo,
+        ILibroRepository libroRepo,
+        IAutorRepository autorRepo,
 
 PrestamoMapper prestamoMapper
         )
@@ -35,17 +35,9 @@ PrestamoMapper prestamoMapper
 
     public async Task<IEnumerable<PrestamoResponseDto>> GetPrestamosNoDevueltos()
     {
-
         var prestamos = await _prestamoRepo.GetPrestamosNoDevueltos();
-
-        return prestamos.Select(p => new PrestamoResponseDto
-        {
-
-            LibroId = p.LibroId,
-            Titulo = p.Libro.Titulo,
-            AutorId = p.Libro.AutorId,
-            Nombre = p.Libro.Autor.Nombre
-        });
+        var result = _prestamoMapper.ToResponseList(prestamos);
+        return result;
     }
 
 

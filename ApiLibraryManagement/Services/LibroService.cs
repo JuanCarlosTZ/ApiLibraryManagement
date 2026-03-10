@@ -2,11 +2,11 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 public class LibroService : ILibroService
 {
-    private readonly LibroRepository _libroRepo;
-    private readonly AutorRepository _autorRepo;
+    private readonly ILibroRepository _libroRepo;
+    private readonly IAutorRepository _autorRepo;
     private readonly LibroMapper _mapper;
 
-    public LibroService(LibroRepository libroRepo, AutorRepository autorRepo, LibroMapper mapper)
+    public LibroService(ILibroRepository libroRepo, IAutorRepository autorRepo, LibroMapper mapper)
     {
         _libroRepo = libroRepo;
         _autorRepo = autorRepo;
@@ -17,7 +17,10 @@ public class LibroService : ILibroService
     {
         var autor = await _autorRepo.GetById(dto.AutorId);
         if (autor == null)
-            throw new BadHttpRequestException("El autor no existe");
+            throw new KeyNotFoundException($"El autor con Id {dto.AutorId} no existe");
+
+        if (string.IsNullOrWhiteSpace(dto.Titulo) || dto.AnioPublicacion <= 0)
+            throw new ArgumentException("Datos del libro inválidos");
 
         var libro = _mapper.ToEntity(dto);
         await _libroRepo.Add(libro);

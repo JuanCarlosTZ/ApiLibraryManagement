@@ -23,14 +23,8 @@ public class LibroRepository : ILibroRepository
 
     public async Task<IEnumerable<Libro>> GetLibrosAntesDe2000()
     {
-        return await _db.Libros
+        return await _db.Libros.Include(libro => libro.Autor)
             .Where(libro => libro.AnioPublicacion < 2000)
-            .Select(libro => new Libro
-            {
-                Id = libro.Id,
-                Titulo = libro.Titulo,
-                AnioPublicacion = libro.AnioPublicacion
-            })
             .ToListAsync();
     }
 

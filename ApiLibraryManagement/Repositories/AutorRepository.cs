@@ -4,7 +4,7 @@ public class AutorRepository : IAutorRepository
 {
     private readonly ApplicationDbContext _db;
 
-    AutorRepository(ApplicationDbContext db)
+    public AutorRepository(ApplicationDbContext db)
     {
         _db = db;
     }

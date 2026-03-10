@@ -4,11 +4,11 @@ namespace ApiLibraryManagement.Controllers
 {
     [ApiController]
     [Route("seed")]
-    public class LibroController : ControllerBase
+    public class SeedController : ControllerBase
     {
         private readonly ISeedService _seedService;
 
-        public LibroController(ISeedService seedService)
+        public SeedController(ISeedService seedService)
         {
             _seedService = seedService;
         }

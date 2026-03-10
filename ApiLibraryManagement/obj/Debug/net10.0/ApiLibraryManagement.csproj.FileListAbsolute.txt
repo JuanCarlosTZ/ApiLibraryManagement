@@ -173,3 +173,4 @@
 /Users/juancarlostz/Projects/DotNET/ApiLibraryManagement/ApiLibraryManagement/bin/Debug/net10.0/Swashbuckle.AspNetCore.Swagger.dll
 /Users/juancarlostz/Projects/DotNET/ApiLibraryManagement/ApiLibraryManagement/bin/Debug/net10.0/Swashbuckle.AspNetCore.SwaggerGen.dll
 /Users/juancarlostz/Projects/DotNET/ApiLibraryManagement/ApiLibraryManagement/bin/Debug/net10.0/Swashbuckle.AspNetCore.SwaggerUI.dll
+/Users/juancarlostz/Projects/DotNET/ApiLibraryManagement/ApiLibraryManagement/obj/Debug/net10.0/ApiLibraryManagement.sourcelink.json

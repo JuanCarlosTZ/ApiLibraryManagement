@@ -13,7 +13,7 @@ namespace ApiLibraryManagement.Controllers
             _prestamoService = prestamoService;
         }
 
-     
+
         [HttpGet("no-devueltos")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -30,32 +30,30 @@ namespace ApiLibraryManagement.Controllers
             }
         }
 
-      
+
         [HttpPut("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> ActualizarFechaDevolucion(int id, [FromBody] UpdatePrestamoDto dto)
+        public async Task<IActionResult> UpdateFechaDevolucion(int id, [FromBody] UpdatePrestamoDto dto)
         {
-            var result = await _prestamoService.UpdatePrestamo(id, dto);
-            if (result == null)
-                return NotFound(new { message = $"Préstamo con id {id} no encontrado." });
+            var result  =await _prestamoService.UpdatePrestamo(id, dto);
+            if (!result) return StatusCode(404, new { message = "El prestamo no existe" });
 
-            return Ok(new { message = result });
+            return Ok();
         }
 
 
-       
+
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> RemovePrestamo(int id)
         {
             var result = await _prestamoService.DeletePrestamo(id);
-            if (result == null)
-                return NotFound(new { message = $"Préstamo con id {id} no encontrado." });
+            if (!result) return StatusCode(404, new { message = "El prestamo no existe" });
 
-            return Ok(new { message = result });
+            return Ok(new { message = "Eliminado satisfactoriamente" });
         }
     }
 }

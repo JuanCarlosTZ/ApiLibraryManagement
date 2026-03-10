@@ -8,11 +8,21 @@ var connectionString = EnvConfig.GetConnectionString();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 
+// Repositorios
+builder.Services.AddScoped<ILibroRepository, LibroRepository>();
+builder.Services.AddScoped<IAutorRepository, AutorRepository>();
+builder.Services.AddScoped<IPrestamoRepository, PrestamoRepository>();
+
+// // Servicios
+builder.Services.AddScoped<ILibroService, LibroService>();
+builder.Services.AddScoped<IPrestamoService, PrestamoService>();
 builder.Services.AddScoped<ISeedService, SeedService>();
 
-builder.Services.AddSingleton<SeedMapper>();
+// Mappers
 builder.Services.AddSingleton<LibroMapper>();
 builder.Services.AddSingleton<AutorMapper>();
+builder.Services.AddSingleton<PrestamoMapper>();
+builder.Services.AddSingleton<SeedMapper>();
 
 builder.Services.AddControllers();
 

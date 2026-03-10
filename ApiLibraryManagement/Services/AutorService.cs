@@ -1,9 +1,9 @@
 public class AutorService : IAutorService
 {
-    private readonly AutorRepository _repo;
+    private readonly IAutorRepository _repo;
     private readonly AutorMapper _mapper;
 
-    public AutorService(AutorRepository repo, AutorMapper mapper)
+    public AutorService(IAutorRepository repo, AutorMapper mapper)
     {
         _repo = repo;
         _mapper = mapper;
@@ -22,8 +22,4 @@ public class AutorService : IAutorService
             .ContinueWith(autor => autor.Result != null ? autor.Result : null);
     }
 
-    public Task DeleteAutorAll()
-    {
-        return _repo.DeleteAll();
-    }
 }

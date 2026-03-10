@@ -60,7 +60,7 @@ public class SeedService : ISeedService
 
     public async Task<IEnumerable<SeedPrestamoResponseDto>> GetAllPrestamos()
     {
-        return _db.Prestamos.Select(p => _mapper.ToSeedResponse(p));
+        return _db.Prestamos.Include(p => p.Libro).ThenInclude(l => l.Autor).Select(p => _mapper.ToSeedResponse(p));
     }
 
 

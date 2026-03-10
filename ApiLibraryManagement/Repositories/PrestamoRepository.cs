@@ -24,7 +24,7 @@ public class PrestamoRepository : IPrestamoRepository
 
     public async Task<List<Prestamo>> GetPrestamosNoDevueltos()
     {
-        return await _db.Prestamos
+        return await _db.Prestamos.Include(p => p.Libro).ThenInclude(l => l.Autor)
             .Where(p => p.FechaDevolucion == null)
             .Select(prestamo => prestamo)
             .ToListAsync();

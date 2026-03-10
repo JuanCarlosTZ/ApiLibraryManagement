@@ -41,13 +41,4 @@ public class SeedMapper
         };
     }
 
-    // Métodos para listas completas
-    public List<SeedAutorResponseDto> ToSeedResponse(List<Autor> autores)
-        => autores.Select(ToSeedResponse).ToList();
-
-    public List<SeedLibroResponseDto> ToSeedResponse(List<Libro> libros)
-        => libros.Select(ToSeedResponse).ToList();
-
-    public List<SeedPrestamoResponseDto> ToSeedResponse(List<Prestamo> prestamos)
-        => prestamos.Select(ToSeedResponse).ToList();
 }

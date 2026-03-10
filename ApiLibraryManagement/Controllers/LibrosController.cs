@@ -13,7 +13,6 @@ namespace ApiLibraryManagement.Controllers
             _libroService = libroService;
         }
 
-        // GET /libros/antes-de-2000
         [HttpGet("antes-de-2000")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -41,6 +40,15 @@ namespace ApiLibraryManagement.Controllers
             {
                 var result = await _libroService.AddLibro(libroDto);
                 return CreatedAtAction(nameof(GetLibrosAntesDel2000), new { id = result.LibroId }, result);
+            }
+            catch (ArgumentException ex)
+            {
+
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
             }
             catch (Exception ex)
             {
