@@ -1,0 +1,21 @@
+name: Api-Library-Management
+
+services:
+  sql:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    container_name: sqledge
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "${DB_PASSWORD}"
+    volumes:
+      - sqlserverdata:/var/opt/mssql
+
+volumes:
+  sqlserverdata:
+# Comandos útiles:
+# Levantar los contenedores en segundo plano:
+#   docker-compose up -d
+# Apagar y eliminar contenedores (no borra los volúmenes):
+#   docker-compose down
