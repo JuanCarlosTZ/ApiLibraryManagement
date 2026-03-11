@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 public class CreateUserDto
 {
 
-    [Requiered(ErrorMessage = "El campo username es requerido")]
+    [Required(ErrorMessage = "El campo username es requerido")]
     public string Username { get; set; }
     [Required(ErrorMessage = "El campo name es requerido")]
     public string Name { get; set; }

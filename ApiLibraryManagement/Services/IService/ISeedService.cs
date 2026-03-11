@@ -7,6 +7,7 @@ public interface ISeedService
     Task<IEnumerable<SeedAutorResponseDto>> GetAllAutores();
     Task<IEnumerable<SeedLibroResponseDto>> GetAllLibros();
     Task<IEnumerable<SeedPrestamoResponseDto>> GetAllPrestamos();
+    Task<IEnumerable<SeedUsuarioResponseDto>> GetAllUsuarios();
 
     Task _DeleteAutorAll() ;
     Task _DeleteLibroAll();

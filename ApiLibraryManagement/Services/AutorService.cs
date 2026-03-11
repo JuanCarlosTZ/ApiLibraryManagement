@@ -18,8 +18,7 @@ public class AutorService : IAutorService
 
     public Task<Autor?> GetAutorById(int id)
     {
-        return _repo.GetById(id)
-            .ContinueWith(autor => autor.Result != null ? autor.Result : null);
+        return _repo.GetById(id);
     }
 
 }

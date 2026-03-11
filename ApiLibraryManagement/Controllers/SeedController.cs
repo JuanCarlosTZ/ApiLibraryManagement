@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiLibraryManagement.Controllers
@@ -52,5 +53,16 @@ namespace ApiLibraryManagement.Controllers
             var response = await _seedService.GetAllPrestamos();
             return Ok(response);
         }
+
+        [HttpGet("usuarios")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<IActionResult> GetAllUsuarios()
+        {
+            var response = await _seedService.GetAllUsuarios();
+            return Ok(response);
+        }
+
     }
 }

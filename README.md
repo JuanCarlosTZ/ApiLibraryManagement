@@ -78,25 +78,56 @@ dotnet restore
 
 4. Levantar la base de datos.
 ```
-docker-compose up -d
+docker-compose -f ApiLibraryManagement/docker-compose.yaml up -d
 ```
 
 5. Iniciar migraciones de EF Core
 ```
-dotnet ef migrations add InitialCreate
+dotnet ef migrations add InitialCreate --project ApiLibraryManagement
 ```
 
 6. Crear base de datos y tablas
 ```
-dotnet ef database update
+dotnet ef database update --project ApiLibraryManagement
 ```
 
-7. Ejecutart el proyecto. Correr el proyecto desde el archivo ``Program.cs`` haciendo clic en play. Alternativa, ejecutar el comando ``dotnet run``
+7. Ejecutart el proyecto. 
+```
+dotnet watch run --project ApiLibraryManagement
+```
 
 
-8. Inicializar data en la base de datos
+8. Inicializar data en la base de datos ejecutando el siguiente EndPoint.
 ```
 post method 
 http://localhost:5054/seed
 ```
+Este endpoint insertará los datos iniciales necesarios para probar la API.
 
+
+9. Usuarios de prueba para autenticación
+
+Después de ejecutar el endpoint de inicialización (POST /seed), se crean los siguientes usuarios para pruebas de autenticación:
+
+Rol	Username	Password
+Admin	admin@library.com	Admin123!
+Cliente	cliente@library.com	Cliente123!
+
+Estos usuarios pueden utilizarse para autenticarse mediante el endpoint de login.
+
+Endpoint de autenticación:
+
+POST /usuario/login
+
+Ejemplo de request:
+
+{
+  "username": "admin@library.com",
+  "password": "Admin123!"
+}
+
+El endpoint devolverá un JWT token que debe utilizarse para acceder a los endpoints protegidos.
+
+Ejemplo de uso del token:
+
+Authorization: Bearer {token}

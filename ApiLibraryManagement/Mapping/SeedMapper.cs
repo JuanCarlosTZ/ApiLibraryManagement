@@ -41,4 +41,24 @@ public class SeedMapper
         };
     }
 
+    public SeedUsuarioResponseDto ToSeedResponse(User usuario)
+    {
+        return new SeedUsuarioResponseDto
+        {
+            Name = usuario.Name ?? "",
+            Username = usuario.Username,
+            Role = usuario.Role,
+        };
+    }
+
+    public SeedUsuarioResponseDto ToSeedResponse(CreateUserDto usuario)
+    {
+        return new SeedUsuarioResponseDto
+        {
+            Name = usuario.Name ?? "",
+            Username = usuario.Username,
+            Role = usuario.Role,
+        };
+    }
+
 }

@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiLibraryManagement.Controllers
 {
     [ApiController]
     [Route("prestamos")]
+    [Authorize]
     public class PrestamosController : ControllerBase
     {
         private readonly IPrestamoService _prestamoService;
@@ -15,6 +17,7 @@ namespace ApiLibraryManagement.Controllers
 
 
         [HttpGet("no-devueltos")]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetPrestamosNoDevueltos()
@@ -37,15 +40,15 @@ namespace ApiLibraryManagement.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateFechaDevolucion(int id, [FromBody] UpdatePrestamoDto dto)
         {
-            var result  =await _prestamoService.UpdatePrestamo(id, dto);
+            var result = await _prestamoService.UpdatePrestamo(id, dto);
             if (!result) return StatusCode(404, new { message = "El prestamo no existe" });
 
             return Ok();
         }
 
 
-
         [HttpDelete("{id:int}")]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> RemovePrestamo(int id)

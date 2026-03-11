@@ -1,71 +1,77 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using ApiLibraryManagement;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.IdentityModel.Tokens;
 
 public class UserService : IUserService
 {
     private readonly IUserRepository _userRepo;
     private readonly UserMapper _mapper;
 
+    private readonly string? secretKey;
+
+
     public UserService(IUserRepository userRepo, UserMapper mapper)
     {
         _userRepo = userRepo;
         _mapper = mapper;
+        secretKey = EnvConfig.JwtSecret;
     }
 
 
     public async Task<LoginUserResponseDto> Login(LoginUserDto loginUserDto)
     {
-        if (string.IsNullOrEmpty(loginUserDto.Username))
-        {
-            return _mapper.ToLoginError(message: "El Username es requerido");
-        }
+
+        Console.WriteLine("Login test 2");
 
         var user = await _userRepo.GetByUsername(loginUserDto.Username);
         if (user == null)
         {
-            return _mapper.ToLoginError(message: "Username no encontrado");
+            throw new UnauthorizedAccessException("Usuario no encontrado");
+            // return _mapper.ToLoginError(null, null, message: "Username no encontrado");
         }
+
+        Console.WriteLine("Login test 3");
 
         if (!BCrypt.Net.BCrypt.Verify(loginUserDto.Password, user.Password))
         {
-            return _mapper.ToLoginError(message: "Credenciales son incorrectas");
+            throw new UnauthorizedAccessException("Credenciales incorrectas");
         }
 
+        Console.WriteLine("Login test 4");
+        Console.WriteLine(secretKey);
+        Console.WriteLine("secretKey");
 
-        // JWT
+
+
+        // JWT Generador
         var handlerToken = new JwtSecurityTokenHandler();
         if (string.IsNullOrWhiteSpace(secretKey))
         {
-            throw new InvalidOperationException("SecretKey no esta configurada");
+
+            throw new InvalidOperationException("SecretKey no está configurada");
         }
-
-
 
         var key = Encoding.UTF8.GetBytes(secretKey);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[]
-          {
-        new Claim("id",user.Id.ToString()),
-        new Claim("username",user.Username),
-        new Claim(ClaimTypes.Role,user.Role ?? string.Empty),
-      }
+            {
+                new Claim("id",user.Id.ToString()),
+                new Claim("username",user.Username),
+                new Claim(ClaimTypes.Role,user.Role ?? string.Empty),
+            }
           ),
             Expires = DateTime.UtcNow.AddHours(2),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
+
         var token = handlerToken.CreateToken(tokenDescriptor);
-        return new UserLoginResponseDto()
-        {
-            Token = handlerToken.WriteToken(token),
-            User = new UserRegisterDto()
-            {
-                Username = user.Username,
-                Name = user.Name,
-                Role = user.Role,
-                Password = user.Password ?? ""
-            },
-            Message = "Usuario logueado correctamente"
-        };
+        var tokenString = handlerToken.WriteToken(token);
+
+        return _mapper.ToLoginUserResponse(user, tokenString);
 
     }
 
@@ -77,6 +83,12 @@ public class UserService : IUserService
         var user = _mapper.ToEntity(createUserDto);
         return await _userRepo.Add(user);
     }
+
+    public async Task<User?> GetUserById(int id)
+    {
+        return await _userRepo.GetById(id);
+    }
+
 
 
 }

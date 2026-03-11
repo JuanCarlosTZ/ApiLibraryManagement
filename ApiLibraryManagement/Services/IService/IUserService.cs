@@ -1,7 +1,6 @@
 public interface IUserService
 {
-  Task<ICollection<User>> GetUsers();
-  Task<User?> GetUser(int id);
-  Task<UserLoginResponseDto> Login(UserLoginDto userLoginDto);
+  Task<User?> GetUserById(int id);
+  Task<LoginUserResponseDto> Login(LoginUserDto loginUserDto);
   Task<User> Register(CreateUserDto createUserDto);
 }

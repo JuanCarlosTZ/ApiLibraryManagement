@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiLibraryManagement.Controllers
 {
     [ApiController]
     [Route("libros")]
+    [Authorize]
     public class LibrosController : ControllerBase
     {
         private readonly ILibroService _libroService;
@@ -14,6 +16,7 @@ namespace ApiLibraryManagement.Controllers
         }
 
         [HttpGet("antes-de-2000")]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetLibrosAntesDel2000()

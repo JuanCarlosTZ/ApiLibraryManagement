@@ -21,7 +21,7 @@ public class UserMapper
     }
 
 
-    public LoginUserResponseDto ToLoginError(User? user, string? token, string? message)
+    public LoginUserResponseDto ToLoginError(User? user = null, string? token = null, string? message =null)
     {
         var userProfile = (user == null) ? null
         : new UserDto
@@ -51,5 +51,6 @@ public class UserMapper
             Role = dto.Role
         };
     }
+
 
 }

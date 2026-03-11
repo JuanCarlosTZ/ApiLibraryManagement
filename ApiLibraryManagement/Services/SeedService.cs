@@ -7,21 +7,49 @@ public class SeedService : ISeedService
 {
     private readonly ApplicationDbContext _db;
     private readonly SeedMapper _mapper;
+    private SeedUsuarioResponseDto[] _seedTestUsers;
 
     public SeedService(ApplicationDbContext db, SeedMapper mapper)
     {
         _db = db;
         _mapper = mapper;
+        _seedTestUsers = [];
     }
 
     // ------------------ Seed Inicial ------------------
     /// Inicializa la base de datos de prueba con datos predeterminados
     public async Task Seed()
     {
+
+        var adminUser = new CreateUserDto()
+        {
+            Name = "admin",
+            Username = "admin@library.com",
+            Password = "Admin123!",
+            Role = "Admin"
+        };
+
+        var clientUser = new CreateUserDto()
+        {
+            Name = "cliente",
+            Username = "cliente@library.com",
+            Password = "Cliente123!",
+            Role = "Cliente"
+        };
+
+        var seedUsers = new SeedUsuarioResponseDto[]
+        {
+            _mapper.ToSeedResponse(adminUser),
+            _mapper.ToSeedResponse(clientUser)
+        };
+        _seedTestUsers = seedUsers;
+
+
         // Primero eliminamos todo
         await _DeletePrestamoAll();
         await _DeleteLibroAll();
         await _DeleteAutorAll();
+        await _DeleteUsuariosAll();
 
         // --- Agregar Autores ---
         var autor1 = await _AddAutor(new AddAutorDto { Nombre = "Gabriel García Márquez", Nacionalidad = "Colombiana" });
@@ -43,6 +71,10 @@ public class SeedService : ISeedService
         prestamoDevuelto.FechaDevolucion = DateTime.Now.AddDays(-10);
         await _db.SaveChangesAsync();
 
+        // --- Agregar Usuarios de prueba ---
+        await _AddUsuario(adminUser.Name, adminUser.Username, adminUser.Password, adminUser.Role);
+        await _AddUsuario(clientUser.Name, clientUser.Username, clientUser.Password, clientUser.Role);
+
     }
 
 
@@ -61,6 +93,11 @@ public class SeedService : ISeedService
     public async Task<IEnumerable<SeedPrestamoResponseDto>> GetAllPrestamos()
     {
         return _db.Prestamos.Include(p => p.Libro).ThenInclude(l => l.Autor).Select(p => _mapper.ToSeedResponse(p));
+    }
+
+    public async Task<IEnumerable<SeedUsuarioResponseDto>> GetAllUsuarios()
+    {
+        return _db.Usuarios.Select(u => _mapper.ToSeedResponse(u));
     }
 
 
@@ -82,6 +119,13 @@ public class SeedService : ISeedService
         _db.Prestamos.RemoveRange(_db.Prestamos);
         await _db.SaveChangesAsync();
     }
+
+    public async Task _DeleteUsuariosAll()
+    {
+        _db.Usuarios.RemoveRange(_db.Usuarios);
+        await _db.SaveChangesAsync();
+    }
+
 
     public async Task<Autor> _AddAutor(AddAutorDto dto)
     {
@@ -125,6 +169,22 @@ public class SeedService : ISeedService
         await _db.SaveChangesAsync();
         return prestamo;
     }
+
+    public async Task<User> _AddUsuario(string nombre, string email, string password, string rol)
+    {
+        var usuario = new User
+        {
+            Name = nombre,
+            Username = email,
+            Password = BCrypt.Net.BCrypt.HashPassword(password),
+            Role = rol
+        };
+
+        _db.Usuarios.Add(usuario);
+        await _db.SaveChangesAsync();
+        return usuario;
+    }
+
 
 
 

@@ -1,6 +1,0 @@
-<Solution>
-  <Folder Name="/Extra files/">
-    <File Path="README.txt" />
-  </Folder>
-  <Project Path="ApiLibraryManagement/ApiLibraryManagement.csproj" />
-</Solution>
