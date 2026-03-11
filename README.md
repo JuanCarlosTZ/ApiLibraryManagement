@@ -81,23 +81,17 @@ dotnet restore
 docker-compose -f ApiLibraryManagement/docker-compose.yaml up -d
 ```
 
-5. Iniciar migraciones de EF Core
-```
-dotnet ef migrations add InitialCreate --project ApiLibraryManagement
-```
-
-6. Crear base de datos y tablas
+5. Crear base de datos y tablas
 ```
 dotnet ef database update --project ApiLibraryManagement
 ```
 
-7. Ejecutart el proyecto. 
+6. Ejecutart el proyecto. 
 ```
 dotnet watch run --project ApiLibraryManagement
 ```
 
-
-8. Inicializar data en la base de datos ejecutando el siguiente EndPoint.
+7. Inicializar data en la base de datos ejecutando el siguiente EndPoint.
 ```
 post method 
 http://localhost:5054/seed
@@ -105,7 +99,7 @@ http://localhost:5054/seed
 Este endpoint insertará los datos iniciales necesarios para probar la API.
 
 
-9. Usuarios de prueba para autenticación
+8. Usuarios de prueba para autenticación
 
 Después de ejecutar el endpoint de inicialización (POST /seed), se crean los siguientes usuarios para pruebas de autenticación:
 
