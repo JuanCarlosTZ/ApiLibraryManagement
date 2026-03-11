@@ -4,15 +4,18 @@
 
 ## =========================
 
-bin/
-obj/
+
 out/
+bin\Debug/
+**/bin/
+**/obj/
 
 ## =========================
 
 ## User-specific files
 
 ## =========================
+ApiLibraryManagement/bin\Debug/test/Test.cs
 
 *.user
 *.rsuser
