@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ApiLibraryManagement.Controllers
 {
-    [ApiController]
     [Route("seed")]
+    [ApiController]
     public class SeedController : ControllerBase
     {
         private readonly ISeedService _seedService;

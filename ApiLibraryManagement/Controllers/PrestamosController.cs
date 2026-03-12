@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ApiLibraryManagement.Controllers
 {
-    [ApiController]
     [Route("prestamos")]
     [Authorize]
+    [ApiController]
     public class PrestamosController : ControllerBase
     {
         private readonly IPrestamoService _prestamoService;
@@ -40,8 +40,10 @@ namespace ApiLibraryManagement.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateFechaDevolucion(int id, [FromBody] UpdatePrestamoDto dto)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
             var result = await _prestamoService.UpdatePrestamo(id, dto);
-            if (!result) return StatusCode(404, new { message = "El prestamo no existe" });
+            if (!result) return NotFound(new { message = "El prestamo no existe" });
 
             return Ok();
         }
@@ -54,7 +56,7 @@ namespace ApiLibraryManagement.Controllers
         public async Task<IActionResult> RemovePrestamo(int id)
         {
             var result = await _prestamoService.DeletePrestamo(id);
-            if (!result) return StatusCode(404, new { message = "El prestamo no existe" });
+            if (!result) return NotFound(new { message = "El prestamo no existe" });
 
             return Ok(new { message = "Eliminado satisfactoriamente" });
         }

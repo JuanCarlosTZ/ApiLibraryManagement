@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ApiLibraryManagement.Controllers
 {
-    [ApiController]
     [Route("libros")]
     [Authorize]
+    [ApiController]
     public class LibrosController : ControllerBase
     {
         private readonly ILibroService _libroService;
@@ -39,14 +39,15 @@ namespace ApiLibraryManagement.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> AddLibro([FromBody] AddLibroDto libroDto)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
             try
             {
                 var result = await _libroService.AddLibro(libroDto);
-                return CreatedAtAction(nameof(GetLibrosAntesDel2000), new { id = result.LibroId }, result);
+                return StatusCode(201, result);
             }
             catch (ArgumentException ex)
             {
-
                 return BadRequest(new { message = ex.Message });
             }
             catch (KeyNotFoundException ex)

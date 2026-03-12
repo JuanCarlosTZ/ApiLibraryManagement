@@ -125,3 +125,20 @@ El endpoint devolverá un JWT token que debe utilizarse para acceder a los endpo
 Ejemplo de uso del token:
 
 Authorization: Bearer {token}
+
+
+
+
+
+
+
+
+# Algunos comandos utiles para pruebas unitarias
+
+* dotnet test ApiLibraryManagement.Tests --logger "trx;LogFileName=TestResults.trx"
+
+* allure generate ApiLibraryManagement.Tests/TestResults --output ApiLibraryManagement.Tests/TestResults/Report --clean
+
+* allure open ApiLibraryManagement.Tests/TestResults/Report
+
+
